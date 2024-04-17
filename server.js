@@ -64,6 +64,54 @@ app.post('/register', async (req, res) => {
     }
 });
 
+// Endpoint for creating a course
+app.post('/create-course', async (req, res) => {
+    const { courseName, courseDescription, teacherId } = req.body;
+
+    try {
+        // Insert the new course into the database
+        await pool.query('INSERT INTO courses (name, description, teacher_id) VALUES ($1, $2, $3)', [courseName, courseDescription, teacherId]);
+
+        // Course creation successful
+        res.json({ message: 'Course created successfully' });
+    } catch (error) {
+        console.error('Error while creating course:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Endpoint for enrolling in a course
+app.post('/enroll-course', async (req, res) => {
+    const { studentId, courseId } = req.body;
+
+    try {
+        // Insert the enrollment record into the database
+        await pool.query('INSERT INTO enrollments (student_id, course_id) VALUES ($1, $2)', [studentId, courseId]);
+
+        // Course enrollment successful
+        res.json({ message: 'Enrolled in course successfully' });
+    } catch (error) {
+        console.error('Error while enrolling in course:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Endpoint for dropping a course
+app.post('/drop-course', async (req, res) => {
+    const { studentId, courseId } = req.body;
+
+    try {
+        // Delete the enrollment record from the database
+        await pool.query('DELETE FROM enrollments WHERE student_id = $1 AND course_id = $2', [studentId, courseId]);
+
+        // Course dropping successful
+        res.json({ message: 'Dropped course successfully' });
+    } catch (error) {
+        console.error('Error while dropping course:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 
 const cors = require('cors');
 app.use(cors());

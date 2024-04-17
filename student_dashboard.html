@@ -4,43 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
-    <style>
-        /* Basic styling for the dashboard */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        p {
-            color: #666;
-        }
-        .logout-btn {
-            display: block;
-            margin-top: 20px;
-            text-align: center;
-        }
-    </style>
+    <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <div class="container">
     <h1>Welcome to Student Dashboard</h1>
-    <p>This is the dashboard for students. Here, you can view your courses, assignments, grades, etc.</p>
-    <a href="#" class="logout-btn">Logout</a>
+    <!-- Link/button to navigate to course catalog page -->
+    <a href="#" id="view-courses-btn" class="btn">View Courses</a>
+    <!-- List of enrolled courses -->
+    <ul id="enrolled-courses">
+        <!-- Enrolled course items will be dynamically populated here -->
+    </ul>
 </div>
 
+<!-- Link to your JavaScript file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+<script>// Wait for the DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get the enrolled courses list element
+        const enrolledCoursesList = document.getElementById('enrolled-courses');
+    
+        // Fetch enrolled courses data from the backend
+        axios.get('http://localhost:3000/enrolled-courses')
+            .then(response => {
+                // Check if the request was successful
+                if (response.status === 200) {
+                    const enrolledCourses = response.data;
+    
+                    // Clear any existing content in the enrolled courses list
+                    enrolledCoursesList.innerHTML = '';
+    
+                    // Populate the enrolled courses list with fetched data
+                    enrolledCourses.forEach(course => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = course.name;
+                        enrolledCoursesList.appendChild(listItem);
+                    });
+                } else {
+                    // Handle error response
+                    console.error('Failed to fetch enrolled courses:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle network errors or other issues
+                console.error('Error while fetching enrolled courses:', error.message);
+            });
+    
+        // Add event listener for the "View Courses" button
+        const viewCoursesBtn = document.getElementById('view-courses-btn');
+        viewCoursesBtn.addEventListener('click', (event) => {
+            // Prevent the default link behavior
+            event.preventDefault();
+    
+            // Redirect to the course catalog page
+            window.location.href = 'course_catalog.html';
+        });
+    });
+</script>
 </body>
 </html>
