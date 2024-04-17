@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Catalog</title>
+    <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Course Catalog</h1>
+    <!-- List of available courses -->
+    <ul id="course-catalog">
+        <!-- Available course items will be dynamically populated here -->
+    </ul>
+</div>
+
+<!-- Link to your JavaScript file -->
+<script>// Wait for the DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get the course catalog list element
+        const courseCatalogList = document.getElementById('course-catalog');
+    
+        // Fetch available courses data from the backend
+        axios.get('http://localhost:3000/course-catalog')
+            .then(response => {
+                // Check if the request was successful
+                if (response.status === 200) {
+                    const courseCatalog = response.data;
+    
+                    // Clear any existing content in the course catalog list
+                    courseCatalogList.innerHTML = '';
+    
+                    // Populate the course catalog list with fetched data
+                    courseCatalog.forEach(course => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = course.name;
+                        courseCatalogList.appendChild(listItem);
+                    });
+                } else {
+                    // Handle error response
+                    console.error('Failed to fetch course catalog:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle network errors or other issues
+                console.error('Error while fetching course catalog:', error.message);
+            });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Course</title>
+    <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Create Course</h1>
+    <!-- Course creation form -->
+    <form id="course-form">
+        <label for="course-name">Course Name:</label>
+        <input type="text" id="course-name" name="course-name" required>
+        <label for="course-description">Description:</label>
+        <textarea id="course-description" name="course-description" required></textarea>
+        <button type="submit" class="btn">Create</button>
+    </form>
+</div>
+
+<!-- Link to your JavaScript file -->
+<script>// Wait for the DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get the course creation form element
+        const courseForm = document.getElementById('course-form');
+    
+        // Add event listener for form submission
+        courseForm.addEventListener('submit', (event) => {
+            // Prevent the default form submission
+            event.preventDefault();
+    
+            // Get the course name and description from the form
+            const courseName = courseForm.elements['course-name'].value;
+            const courseDescription = courseForm.elements['course-description'].value;
+    
+            // Create a new course object
+            const newCourse = {
+                name: courseName,
+                description: courseDescription
+            };
+    
+            // Send a POST request to create the course
+            axios.post('http://localhost:3000/create-course', newCourse)
+                .then(response => {
+                    // Check if the request was successful
+                    if (response.status === 200) {
+                        alert('Course created successfully');
+                        // Redirect to the course catalog page
+                        window.location.href = 'course_catalog.html';
+                    } else {
+                        // Handle error response
+                        console.error('Failed to create course:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    // Handle network errors or other issues
+                    console.error('Error while creating course:', error.message);
+                });
+        });
+    });
+</script>
+</body>
+</html>
