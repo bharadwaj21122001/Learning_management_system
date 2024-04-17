@@ -1,0 +1,2 @@
+Chat gpt = https://chat.openai.com/share/920e7953-edc6-4d7b-835c-2f37b720db6f
+Torus = https://msit.getlearning.app/courses/438/external_tools/419, https://msit.getlearning.app/courses/439/external_tools/420
