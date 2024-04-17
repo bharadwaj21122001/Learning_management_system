@@ -112,6 +112,37 @@ app.post('/drop-course', async (req, res) => {
     }
 });
 
+// Endpoint for posting a new discussion thread
+app.post('/create-thread', async (req, res) => {
+    const { title, initialPost, courseId } = req.body;
+
+    try {
+        // Insert the new thread into the database
+        await pool.query('INSERT INTO threads (title, initial_post, course_id) VALUES ($1, $2, $3)', [title, initialPost, courseId]);
+
+        // Thread creation successful
+        res.json({ message: 'New thread created successfully' });
+    } catch (error) {
+        console.error('Error while creating new thread:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Endpoint for replying to a discussion thread
+app.post('/reply-to-thread', async (req, res) => {
+    const { threadId, userId, replyContent } = req.body;
+
+    try {
+        // Insert the new reply into the database
+        await pool.query('INSERT INTO replies (thread_id, user_id, content) VALUES ($1, $2, $3)', [threadId, userId, replyContent]);
+
+        // Reply submission successful
+        res.json({ message: 'Reply submitted successfully' });
+    } catch (error) {
+        console.error('Error while submitting reply:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 const cors = require('cors');
 app.use(cors());

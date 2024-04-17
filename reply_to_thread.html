@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reply to Thread</title>
+    <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Reply to Thread</h1>
+    <!-- Reply to thread form -->
+    <form id="reply-thread-form">
+        <label for="reply-content">Your Reply:</label>
+        <textarea id="reply-content" name="reply-content" required></textarea>
+        <!-- Hidden input field to store the thread ID -->
+        <input type="hidden" id="thread-id" name="thread-id" value="1">
+        <!-- Hidden input field to store the user ID (assuming you have authentication) -->
+        <input type="hidden" id="user-id" name="user-id" value="1">
+        <button type="submit" class="btn">Submit Reply</button>
+    </form>
+</div>
+
+
+<script>// Wait for the DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get the reply to thread form element
+        const replyThreadForm = document.getElementById('reply-thread-form');
+    
+        // Add event listener for form submission
+        replyThreadForm.addEventListener('submit', (event) => {
+            // Prevent the default form submission
+            event.preventDefault();
+    
+            // Get the reply content, thread ID, and user ID from the form
+            const replyContent = replyThreadForm.elements['reply-content'].value;
+            const threadId = replyThreadForm.elements['thread-id'].value;
+            const userId = replyThreadForm.elements['user-id'].value;
+    
+            // Create a new reply object
+            const newReply = {
+                replyContent: replyContent,
+                threadId: threadId,
+                userId: userId
+            };
+    
+            // Send a POST request to submit the reply
+            axios.post('http://localhost:3000/reply-to-thread', newReply)
+                .then(response => {
+                    // Check if the request was successful
+                    if (response.status === 200) {
+                        alert('Reply submitted successfully');
+                        // Redirect to another page or perform any other action
+                        // For example, redirect back to the discussion thread page
+                        window.location.href = 'discussion_thread.html';
+                    } else {
+                        // Handle error response
+                        console.error('Failed to submit reply:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    // Handle network errors or other issues
+                    console.error('Error while submitting reply:', error.message);
+                });
+        });
+    });
+    
+</script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Thread</title>
+    <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Create New Thread</h1>
+    <!-- Discussion thread creation form -->
+    <form id="create-thread-form">
+        <label for="thread-title">Thread Title:</label>
+        <input type="text" id="thread-title" name="thread-title" required>
+        <label for="initial-post">Initial Post:</label>
+        <textarea id="initial-post" name="initial-post" required></textarea>
+        <!-- Assuming you have a dropdown/select element to choose the course -->
+        <label for="course-id">Course:</label>
+        <select id="course-id" name="course-id" required>
+            <option value="1">Course 1</option>
+            <option value="2">Course 2</option>
+            <!-- Add more options dynamically based on available courses -->
+        </select>
+        <button type="submit" class="btn">Create Thread</button>
+    </form>
+</div>
+
+
+<script>// Wait for the DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get the thread creation form element
+        const createThreadForm = document.getElementById('create-thread-form');
+    
+        // Add event listener for form submission
+        createThreadForm.addEventListener('submit', (event) => {
+            // Prevent the default form submission
+            event.preventDefault();
+    
+            // Get the thread title, initial post content, and course ID from the form
+            const threadTitle = createThreadForm.elements['thread-title'].value;
+            const initialPost = createThreadForm.elements['initial-post'].value;
+            const courseId = createThreadForm.elements['course-id'].value;
+    
+            // Create a new thread object
+            const newThread = {
+                title: threadTitle,
+                initialPost: initialPost,
+                courseId: courseId
+            };
+    
+            // Send a POST request to create the thread
+            axios.post('http://localhost:3000/create-thread', newThread)
+                .then(response => {
+                    // Check if the request was successful
+                    if (response.status === 200) {
+                        alert('New thread created successfully');
+                        // Redirect to another page or perform any other action
+                        // For example, redirect to the course discussion page
+                        window.location.href = 'course_discussion.html';
+                    } else {
+                        // Handle error response
+                        console.error('Failed to create thread:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    // Handle network errors or other issues
+                    console.error('Error while creating thread:', error.message);
+                });
+        });
+    });
+    
+</script>
+</body>
+</html>
